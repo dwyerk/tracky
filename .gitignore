@@ -87,3 +87,10 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+Takeout
+links.csv
+location_history_json_converter.py
+driving-directions.json
+me.gpx
+
