@@ -4,7 +4,8 @@ from datetime import datetime
 
 from elasticsearch import Elasticsearch
 import elasticsearch.helpers as helpers
-es = Elasticsearch()
+elastic_url = 'localhost:9200'
+es = Elasticsearch(elastic_url)
 
 index_name = 'history'
 type_name = 'location'
@@ -25,14 +26,12 @@ mapping = {
                             "type": "integer"
                         },
                         "type": {
-                            "type": "string",
-                            "index": "not_analyzed"
+                            "type": "keyword"
                         }
                     }
                 },
                 "timestampMs": {
-                    "type": "string",
-                    "index": "not_analyzed"
+                    "type": "keyword"
                 }
             }
         },
@@ -55,8 +54,7 @@ mapping = {
             "type": "date"
         },
         'timestampMs': {
-            "type": "string",
-            "index": "not_analyzed"
+            "type": "keyword"
         }
     }
 }
