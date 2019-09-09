@@ -1,0 +1,52 @@
+{
+    "index_patterns": ["history-*"],
+    "mappings": {
+        "properties": {
+            "accuracy": {
+                "type": "integer"
+            },
+            "activity": {
+                "type": "nested",
+                "dynamic": false,
+                "properties": {
+                    "activity": {
+                        "type": "nested",
+                        "dynamic": false,
+                        "properties": {
+                            "confidence": {
+                                "type": "integer"
+                            },
+                            "type": {
+                                "type": "keyword"
+                            }
+                        }
+                    },
+                    "timestampMs": {
+                        "type": "keyword"
+                    }
+                }
+            },
+            "point": {
+                "type": "geo_point"
+            },
+            "latitude": {
+                "type": "double"
+            },
+            "latitudeE7": {
+                "type": "double"
+            },
+            "longitude": {
+                "type": "double"
+            },
+            "longitudeE7": {
+                "type": "double"
+            },
+            "@timestamp": {
+                "type": "date"
+            },
+            "timestampMs": {
+                "type": "keyword"
+            }
+        }
+    }
+}

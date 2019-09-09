@@ -93,4 +93,5 @@ links.csv
 location_history_json_converter.py
 driving-directions.json
 me.gpx
-
+.DS_Store
+.idea

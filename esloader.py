@@ -14,11 +14,11 @@ mapping = {
         'accuracy': {
             "type": "integer"
         },
-        "activitys": {
+        "activity": {
             "type": "nested",
             "dynamic": False,
             "properties": {
-                "activities": {
+                "activity": {
                     "type": "nested",
                     "dynamic": False,
                     "properties": {
@@ -74,7 +74,7 @@ for i, location in enumerate(locations):
     location["latitude"] = location['latitudeE7'] / 10000000
     location["longitude"] = location['longitudeE7'] / 10000000
     location["point"] = [location["longitude"], location["latitude"]]
-    #es.index(index=index_name, doc_type=type_name, id=i, body=location)
+    # es.index(index=index_name, doc_type=type_name, id=i, body=location)
     actions.append({
         "_index": index_name,
         "_type": type_name,

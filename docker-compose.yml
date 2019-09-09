@@ -1,12 +1,15 @@
 version: '2.2'
 services:
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
-    container_name: elasticsearch
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    container_name: es01
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      - node.name=es01
+      - discovery.seed_hosts=es02
+      - cluster.initial_master_nodes=es01,es02
     ulimits:
       memlock:
         soft: -1
@@ -17,14 +20,16 @@ services:
       - 9200:9200
     networks:
       - esnet
-  elasticsearch2:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.3.1
-    container_name: elasticsearch2
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    container_name: es02
     environment:
+      - node.name=es02
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
-      - "discovery.zen.ping.unicast.hosts=elasticsearch"
     ulimits:
       memlock:
         soft: -1
@@ -35,12 +40,32 @@ services:
       - esnet
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.3.1
+    image: docker.elastic.co/kibana/kibana:7.3.1
     ports:
       - 5601:5601
-    #environment:
+    environment:
+      ELASTICSEARCH_HOSTS: http://es01:9200
+      XPACK_MONITORING_ENABLED: "true"
     networks:
       - esnet
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.3.1
+    volumes:
+      - ./pipeline:/usr/share/logstash/pipeline/
+      - ./Takeout:/takeout
+      - ./mappings:/takeout/mappings
+    ports:
+      - 9600:9600
+    environment:
+      XPACK_MONITORING_ELASTICSEARCH_HOSTS: http://es01:9200
+      CONFIG_RELOAD_AUTOMATIC: "true"
+      CONFIG_SUPPORT_ESCAPES: "true"
+      # LOG_LEVEL: "debug"
+    networks:
+      - esnet
+    depends_on:
+      - es01
 
 volumes:
   esdata1:
