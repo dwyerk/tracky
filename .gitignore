@@ -89,6 +89,8 @@ ENV/
 .ropeproject
 
 Takeout
+takeout-*zip
+takeout-*tgz
 links.csv
 location_history_json_converter.py
 driving-directions.json
